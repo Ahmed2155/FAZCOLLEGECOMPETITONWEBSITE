@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img src="{% static 'img/logo.png' %}" alt="Logo" height="40"> FAZ Competition Hub</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#">Competition Overview</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Registration</a></li>
+                      <a href="{% url 'logout' %}" class="logout-button">Logout</a>
+                   </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Welcomcde Section -->
+    <div class="container my-5">
+        <div class="p-5 text-center shadow rounded" style="border: 1px solid #ccc;">
+            <h1 class="text-primary fw-bold">Welcome, {{ request.user.first_name|default:request.user.username }} 👋🏾</h1>
+            <p class="text-muted">Ready to test your knowledge?</p>
+            <p class="fs-5">This quiz has a few questions to challenge your mind. Read each question carefully and choose the best answer</p>
+            <p class="text-danger fw-bold">Good Luck and have fun!</p>
+           <a href="#" class="btn btn-danger mt-3 px-4 py-2">Start Quiz</a>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 text-center">
+        <div class="container">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" height="50">
+            <h5 class="mt-2">FAZ Competition Hub</h5>
+            <p class="text-muted">Stay Updated!</p>
+            <form class="d-flex justify-content-center">
+                <input type="email" class="form-control w-25" placeholder="Enter your email">
+                <button class="btn btn-danger ms-2">Subscribe</button>
+            </form>
+            <div class="mt-3">
+                <a href="#"><i class="bi bi-linkedin mx-2"></i></a>
+                <a href="#"><i class="bi bi-instagram mx-2"></i></a>
+                <a href="#"><i class="bi bi-facebook mx-2"></i></a>
+            </div>
+            <small class="text-muted d-block mt-3">&copy; 2025 FAZ Competition Hub</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</body>
+</html>
