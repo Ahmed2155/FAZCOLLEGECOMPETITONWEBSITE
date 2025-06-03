@@ -1,29 +1,17 @@
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-9$t47%u=eg&gcos=2f6iqrxl9na_h3%jtk-taf*5j2%fm&y-at'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fazcollegecompetitonwebsite.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fazcollegecompetitionwebsite.onrender.com']
 
 # CORS SETTINGS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Local frontend
-    "https://fazcollegecompetitionwebsite.onrender.com",  # Deployed frontend
-]
-
-# (Optional) Allow all origins for testing — remove this in production!
-CORS_ALLOW_ALL_ORIGINS = True
-
-# Application definition
 INSTALLED_APPS = [
     'competition',
-    'corsheaders',  # Must be above django.contrib apps
+    'corsheaders',  # ← Must be before django.contrib apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -33,7 +21,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Must be first after security
+    'corsheaders.middleware.CorsMiddleware',  # ← Must be first
     'django.middleware.common.CommonMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -43,6 +31,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# ✅ CORRECT CORS CONFIGURATION — REMOVE CORS_ALLOW_ALL_ORIGINS
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # for local frontend
+    "https://fazcollegecompetitionwebsite.onrender.com",  # for deployed frontend
+]
+
+# Remove this line, it overrides the CORS_ALLOWED_ORIGINS:
+# CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'FAZ.urls'
 
@@ -63,7 +60,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FAZ.wsgi.application'
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -71,7 +67,6 @@ DATABASES = {
     }
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -87,23 +82,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [ BASE_DIR / 'competition' / 'static' ]
 
-# Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 
-# Redirect URLs
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
