@@ -36,6 +36,9 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # for local frontend
     "https://fazcollegecompetitonwebsite.onrender.com",  # for deployed frontend
+    ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://fazcollegecompetitonwebsite.onrender.com"
 ]
 
 # Remove this line, it overrides the CORS_ALLOWED_ORIGINS:
