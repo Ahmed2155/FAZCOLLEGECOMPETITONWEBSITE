@@ -6,7 +6,7 @@ SECRET_KEY = 'django-insecure-9$t47%u=eg&gcos=2f6iqrxl9na_h3%jtk-taf*5j2%fm&y-at
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fazcollegecompetitionwebsite.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fazcollegecompetitonwebsite.onrender.com']
 
 # CORS SETTINGS
 INSTALLED_APPS = [
@@ -35,7 +35,7 @@ MIDDLEWARE = [
 # ✅ CORRECT CORS CONFIGURATION — REMOVE CORS_ALLOW_ALL_ORIGINS
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # for local frontend
-    "https://fazcollegecompetitionwebsite.onrender.com",  # for deployed frontend
+    "https://fazcollegecompetitonwebsite.onrender.com",  # for deployed frontend
 ]
 
 # Remove this line, it overrides the CORS_ALLOWED_ORIGINS:
