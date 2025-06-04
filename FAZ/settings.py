@@ -12,23 +12,35 @@ ALLOWED_HOSTS = [
     'fazcollegecompetitonwebsite.onrender.com',
 ]
 
-# CORS SETTINGS
+# CORS
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # local frontend (React, etc.)
-    "http://localhost:3001",  # additional local frontend port
-    "https://fazcollegecompetitonwebsite.onrender.com",  # deployed frontend
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://fazcollegecompetitonwebsite.onrender.com",
 ]
+CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_CREDENTIALS = True  # ✅ Allow cookies and credentials
-
+# CSRF
 CSRF_TRUSTED_ORIGINS = [
-    "https://fazcollegecompetitonwebsite.onrender.com"
+    "https://fazcollegecompetitonwebsite.onrender.com",
+    "http://localhost:3000",
+    "http://localhost:3001",
 ]
 
-# INSTALLED APPS
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
+
+# SESSION
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+
 INSTALLED_APPS = [
     'competition',
-    'corsheaders',  # ← must be before django.contrib.*
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -37,9 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-# MIDDLEWARE
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # ← must come first
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FAZ.wsgi.application'
 
-# DATABASE
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -76,7 +86,6 @@ DATABASES = {
     }
 }
 
-# PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -84,21 +93,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# INTERNATIONALIZATION
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# STATIC FILES
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [ BASE_DIR / 'competition' / 'static' ]
 
-# EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 
-# REDIRECTS
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

@@ -1,38 +1,45 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+import json
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.models import User
-from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from .models import ParticipantProfile
+import csv
 
+# ✅ CSRF endpoint
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return JsonResponse({'message': 'CSRF cookie set'})
 
-# Landing Page
+# ✅ Landing Page
 def landing_view(request):
     return render(request, 'competition/landing.html')
 
-
+# ✅ Register View (secured, CSRF via frontend)
 def register_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+        try:
+            data = json.loads(request.body)
 
-        if not username:
-            messages.error(request, "Username is required.")
-        elif not password or not confirm_password:
-            messages.error(request, "Password fields cannot be empty.")
-        elif password != confirm_password:
-            messages.error(request, "Passwords do not match.")
-        elif User.objects.filter(username=username).exists():
-            messages.error(request, "Username already taken.")
-        else:
+            username = data.get('username')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            email = data.get('email')
+            password = data.get('password')
+            confirm_password = data.get('confirm_password')
+
+            if not username:
+                return JsonResponse({'error': "Username is required."}, status=400)
+            elif not password or not confirm_password:
+                return JsonResponse({'error': "Password fields cannot be empty."}, status=400)
+            elif password != confirm_password:
+                return JsonResponse({'error': "Passwords do not match."}, status=400)
+            elif User.objects.filter(username=username).exists():
+                return JsonResponse({'error': "Username already taken."}, status=400)
+
             user = User.objects.create_user(
                 username=username,
                 email=email,
@@ -40,43 +47,42 @@ def register_view(request):
                 first_name=first_name or "",
                 last_name=last_name or ""
             )
-            messages.success(request, "Registration successful. Please log in.")
-            return redirect('login')
+            return JsonResponse({'message': "Registration successful"}, status=201)
 
-    return render(request, 'competition/register.html')
+        except json.JSONDecodeError:
+            return JsonResponse({'error': "Invalid JSON"}, status=400)
 
+    return JsonResponse({'error': "Only POST method allowed"}, status=405)
 
-# Login View
+# ✅ Login View (session-based)
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
 
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('dashboard')
-        else:
-            messages.error(request, 'Invalid username or password')
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return JsonResponse({'message': "Login successful"}, status=200)
+            return JsonResponse({'error': "Invalid credentials"}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': "Invalid JSON"}, status=400)
 
-    return render(request, 'competition/login.html')
+    return JsonResponse({'error': "Only POST method allowed"}, status=405)
 
-
-# Dashboard View (Login Required)
+# ✅ Dashboard View (requires login)
 @login_required
 def dashboard_view(request):
-    return render(request, 'competition/dashboard.html', {'user': request.user})
+    return JsonResponse({'message': f'Welcome, {request.user.username}!'}, status=200)
 
-
-# Logout View
+# ✅ Logout
 def logout_view(request):
     logout(request)
-    return redirect('landing')
+    return JsonResponse({'message': 'Logged out'}, status=200)
 
-import csv
-from django.http import HttpResponse
-from .models import ParticipantProfile
-
+# ✅ Export CSV
 def export_participants_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="participants.csv"'
@@ -93,5 +99,4 @@ def export_participants_csv(request):
             profile.phone_number,
             profile.selected_competition_date
         ])
-
     return response
