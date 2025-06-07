@@ -3,7 +3,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('csrf/', views.get_csrf_token, name='get_csrf_token'),
+    path('get-csrf-token/', views.get_csrf_token, name='get_csrf_token'),
     path('', views.landing_view, name='landing'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('register/', views.register_view, name='register'),
