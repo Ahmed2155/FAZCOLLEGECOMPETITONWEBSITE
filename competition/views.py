@@ -58,9 +58,14 @@ def register_view(request):
 def login_view(request):
     if request.method == 'POST':
         try:
+            print("Raw request body:", request.body)  # <-- debug line
+
             data = json.loads(request.body)
             username = data.get('username')
             password = data.get('password')
+
+            if not username or not password:
+                return JsonResponse({'error': "Username and password required"}, status=400)
 
             user = authenticate(request, username=username, password=password)
             if user:
@@ -71,6 +76,7 @@ def login_view(request):
             return JsonResponse({'error': "Invalid JSON"}, status=400)
 
     return JsonResponse({'error': "Only POST method allowed"}, status=405)
+
 
 # ✅ Dashboard View (requires login)
 @login_required
